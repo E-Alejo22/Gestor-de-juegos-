@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gestor de Juegos</title>
+  
+  <style> 
+body { 
+font-family: Arial, sans-serif;
+background-color: #f2f2f2
+}
+
+.contenedor {
+  background-color: white;
+  width: 90%;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 10px;
+}
+  
+  input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+#listaJuegos p {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+#listaJuegos button {
+  background-color: #e74c3c;
+  margin-top: 5px;
+}
+
+#listaJuegos button:hover {
+  background-color: #c0392b;
+}
+
+}
+
+</style>
+
+  
+</head>
+
+
+<body>
+
+<div class = “contenedor”> 
+
+  <h1>Gestor de estadísticas de videojuegos</h1>
+
+  <!-- FORMULARIO -->
+  <input type="text" id="nombreJuego" placeholder="Nombre del juego">
+  <br><br>
+
+  <input type="number" id="horasJuego" placeholder="Horas jugadas">
+  <br><br>
+
+  <button type="button" onclick="agregarJuego()">Agregar juego</button>
+
+  <hr> 
+  <h2>Juegos agregados</h2>
+  <div id="listaJuegos"></div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // 🔹 Cargar juegos guardados (SI EXISTEN)
+    let juegos = JSON.parse(localStorage.getItem("juegos")) || [];
+
+    // Mostrar juegos apenas carga la página
+    mostrarJuegos();
+
+    function agregarJuego() {
+      let nombreJuego = document.getElementById("nombreJuego").value;
+      let horasJuego = document.getElementById("horasJuego").value;
+
+      if (nombreJuego === "" || horasJuego === "") {
+        alert("Por favor llena todos los campos");
+        return;
+      }
+
+      let nuevoJuego = {
+        nombre: nombreJuego,
+        horas: horasJuego
+      };
+
+      juegos.push(nuevoJuego);
+      guardarJuegos();
+      mostrarJuegos();
+
+      document.getElementById("nombreJuego").value = "";
+      document.getElementById("horasJuego").value = "";
+    }
+
+    function borrarJuego(indice) {
+      juegos.splice(indice, 1);
+      guardarJuegos();
+      mostrarJuegos();
+    }
+
+    function mostrarJuegos() {
+      let lista = document.getElementById("listaJuegos");
+      lista.innerHTML = "";
+
+      for (let i = 0; i < juegos.length; i++) {
+        lista.innerHTML += `
+          <p>
+            ${juegos[i].nombre} - ${juegos[i].horas} horas
+            <button onclick="borrarJuego(${i})">Borrar</button>
+          </p>
+        `;
+      }
+    }
+
+    function guardarJuegos() {
+      localStorage.setItem("juegos", JSON.stringify(juegos));
+    }
+  </script>
+
+</div>
+
+</body>
+</html>
